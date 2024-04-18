@@ -7,8 +7,10 @@ mysecretfile.txt
 # 忽略整个目录
 node_modules/
 /node_modules/
-imges/
 */.vscode/
+*/.vscode
+images/
+*/images
  */node_modules/
 # 忽略所有 .pdf 文件，但跟踪特定的 mydoc.pdf
 *.jpg

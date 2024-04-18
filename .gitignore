@@ -18,4 +18,5 @@ images/
 *.gif
 *.pdf
 !mydoc.pdf
+extensions.json
  

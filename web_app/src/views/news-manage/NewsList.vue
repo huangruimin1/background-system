@@ -1,5 +1,5 @@
 <template>
-  添加产品
+  新闻列表
 </template>
 
 <script setup lang="ts" name="Login">

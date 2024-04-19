@@ -7,6 +7,11 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: '/',
+      component: Login
+    },
+    {
+      path: '/login',
       name: 'login',
       component: Login
     },
@@ -18,5 +23,37 @@ const router = createRouter({
     }
   ]
 })
+
+import routersConfig from './config'
+import { useLoginStore } from '@/stores/loginStore'
+
+// 路由守卫
+router.beforeEach((to,from,next)=>{
+  console.log(to);
+  if(to.fullPath === '/login'){
+    next();
+  }else{
+    const loginStore = useLoginStore();
+    if(loginStore.token.value){
+      configRuters();
+      next();
+    }else{
+      next('/login')
+    }
+  }
+})
+
+// 通过循环动态添加路由
+function configRuters(){
+  const loginStore = useLoginStore();
+  if(loginStore.ifSingin) return;
+
+    routersConfig.forEach((item)=>{
+      router.addRoute(item);
+    })
+    loginStore.ifSingin = true
+}
+
+
 
 export default router

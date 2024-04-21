@@ -10,7 +10,8 @@ var UserController = {
             let { id,name,info,age,sex,avatar,role } = result[0];
             let token = JWT.generate({ name,id })
             res.header({
-                Authorization: token
+                Authorization: token,
+                abc:'abc'
             });
             ret = {
                 state : 1,

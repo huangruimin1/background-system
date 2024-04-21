@@ -20,6 +20,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//设置跨域访问
+app.all('*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, Authorization");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("Access-Control-Expose-Headers","Authorization");
+  res.header("X-Powered-By", ' 3.2.1')
+  res.header("Content-Type", "application/json;charset=utf-8");
+  next();
+});
+
 // 路由拦截中间件
 app.use(function(req, res, next) {
   if(req.url == '/adminapi/user/login'){
@@ -29,7 +40,7 @@ app.use(function(req, res, next) {
   var token = req.headers.authorization.split(' ')[1];
   var jwtres = JWT.verify(token);
   if(!jwtres){
-    res.status(401).send({msg:'token 过期需重新登录'});
+    res.status(4000).send({msg:'token 过期需重新登录'});
     return;
   }else{
     token = JWT.generate({
@@ -39,6 +50,7 @@ app.use(function(req, res, next) {
     res.header({
         Authorization: token
     });
+    res.data.token = token;
     req.__userid = jwtres.id;
   }
   next();

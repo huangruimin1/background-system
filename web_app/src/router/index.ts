@@ -29,7 +29,6 @@ import { useLoginStore } from '@/stores/loginStore'
 
 // 路由守卫
 router.beforeEach((to,from,next)=>{
-  console.log(to);
   if(to.fullPath === '/login'){
     next();
   }else{

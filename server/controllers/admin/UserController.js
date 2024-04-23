@@ -1,6 +1,7 @@
 var UserService = require('../../services/admin/UserService')
 const JWT = require("../../util/JWT")
 const fs = require('fs')
+var verificationCode = require('../../public/javascripts/verificationCode.js')
 
 var UserController = {
     login:async (req,res)=>{
@@ -99,6 +100,9 @@ var UserController = {
               })
             }
         })
+    },
+    getCode:(req,res) => {//获取登录验证码
+        verificationCode.getCode(req, res);
     }
 
 }

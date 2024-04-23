@@ -3,7 +3,8 @@ const scret = "huangruimin";
 const pxprires =  '5h';
 const JWT = {
     generate(value){
-        return jsonwebtoken.sign(value,scret,{expiresIn: pxprires});
+        var str = jsonwebtoken.sign(value,scret,{expiresIn: pxprires});
+        return str;
     },
     verify(token){
         try{
@@ -11,7 +12,6 @@ const JWT = {
         }catch{
             return false;
         }
-       
     }
 }
 

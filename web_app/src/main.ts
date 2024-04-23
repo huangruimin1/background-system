@@ -1,7 +1,7 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createPinia, storeToRefs } from 'pinia'
 import 'element-plus/dist/index.css'
 
 import App from './App.vue'
@@ -9,8 +9,13 @@ import router from './router'
 
 import axios from 'axios'
 const app = createApp(App)
+app.use(createPinia())
+import { useLoginStore } from './stores/loginStore';
+const linginStore = useLoginStore();
+const { lodding } = storeToRefs(linginStore);
 
 // 请求拦截器
+axios.defaults.baseURL = "/api"
 axios.interceptors.request.use(
     function (config) {
       // 在发送请求之前做些什么
@@ -19,12 +24,16 @@ axios.interceptors.request.use(
       // 可以在这里添加token等
       //
       // 可以返回config或者返回一个新的config对象
+      // 
+      // config.withCredentials = true;
+      lodding.value = true;
       const token = localStorage.getItem('token');
-      config.headers.Authorization = `Bearer ` + token;
+      config.headers['Authorization'] = `Bearer ` + token;
       return config;
     },
     function (error) {
       // 对请求错误做些什么
+      lodding.value = false;
       return Promise.reject(error);
     }
   );
@@ -43,17 +52,19 @@ axios.interceptors.request.use(
       if(token){
         localStorage.setItem('token',token);
       }
+      lodding.value = false;
       return response;
     },
     function (error) {
       // 对响应错误做点什么
+      lodding.value = false;
       return Promise.reject(error);
     }
   );
 
 
 // app.use(axios)
-app.use(createPinia())
+
 app.use(router)
 
 app.mount('#app')

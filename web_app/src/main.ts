@@ -14,10 +14,19 @@ import { useLoginStore } from './stores/loginStore';
 const linginStore = useLoginStore();
 const { lodding } = storeToRefs(linginStore);
 
+
+app.use(router)
+app.mount('#app')
+
+import { useRouter } from 'vue-router'
+const theRouter = useRouter();
+
 // 请求拦截器
 axios.defaults.baseURL = "/api"
+// axios.defaults.baseURL = "http://127.0.0.1:5173"
+axios.defaults.withCredentials = true;//携带cookie,默认不携带
 axios.interceptors.request.use(
-    function (config) {
+  function (config) {
       // 在发送请求之前做些什么
     //   alert('发送请求')
     //   console.log('请求被拦截:', config);
@@ -41,30 +50,24 @@ axios.interceptors.request.use(
   // 响应拦截器
   axios.interceptors.response.use(
     function (response) {
+      lodding.value = false;
       // 对响应数据做点什么
     //   alert('收到请求')
     //   console.log('响应被拦截:', response);
       // 可以对响应数据进行任意操作
-      if(response.status === 4000){
+      if(response.status === 401){
         alert("身份过期")
+        theRouter.push('/login');
       }
       const token = response.headers.authorization;
       if(token){
         localStorage.setItem('token',token);
       }
-      lodding.value = false;
       return response;
     },
     function (error) {
       // 对响应错误做点什么
-      lodding.value = false;
       return Promise.reject(error);
     }
   );
 
-
-// app.use(axios)
-
-app.use(router)
-
-app.mount('#app')

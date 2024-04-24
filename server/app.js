@@ -2,11 +2,11 @@ var http = require('http');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var JWT = require('./util/JWT.js')
 const session = require('express-session');
-const cors = require('cors')
+var cookieParser = require('cookie-parser');
+// const cors = require('cors')
 
 
 var usersRouter = require('./routes/admin/UserRouter');
@@ -17,14 +17,56 @@ var app = express();
 app.set('trust proxy', 1) // 信任代理
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
+app.use(cookieParser());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors())
 
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// //设置跨域访问
+app.all('*',  function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, Authorization, verCode");
+  res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  res.header("Access-Control-Expose-Headers","Authorization","verCode");
+  res.header("X-Powered-By", ' 3.2.1')
+  res.header("Content-Type", "application/json;charset=utf-8");
+  next();
+});
+
+// app.use(cors({
+//   credentials: true, // 允许发送cookies
+//   // origin: 'http://localhost:5173/.com' // 客户端请求的域名
+// }));
+// 路由拦截中间件
+app.use(function(req, res, next) {
+  console.log(req.headers)
+  if(req.url == '/adminapi/user/login' || req.url == '/adminapi/user/getcode'){
+    next();
+  }else{
+    var str = req.headers.authorization + '';
+    var token = str.split(' ')[1];
+    var jwtres = JWT.verify(token);
+    console.log(jwtres)
+    if(!jwtres){
+      res.status(401).send({msg:'token 过期需重新登录'});
+      return;
+    }else{
+      token = JWT.generate({
+          name: jwtres.name,
+          id: jwtres.id + ""
+      })
+      res.header({
+          Authorization: token
+      });
+      req.__userid = jwtres.id;
+      next();
+    }
+    
+  }
+});
 // 配置session
 /**
  * session
@@ -44,65 +86,15 @@ app.use(cors())
  */
 app.use(session({
   secret: 'huangruimin',
-  // name: 'xxxxID',
-  resave: false,
+  // name: connect.sid,
+  resave: true,
   rolling: false,
   saveUninitialized: true,
   cookie: {
-      secure: true,
-      // domain: 'xxx.xxx.xxx.xxx:xxxx', // 域名
-      path: '/',
       httpOnly: false,
-      maxAge: 1800000
+      maxAge: 180000
   }
 }));
-
-//设置跨域访问
-// app.all('*', cors(), function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, Authorization");
-//   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-//   res.header("Access-Control-Expose-Headers","Authorization");
-//   res.header("X-Powered-By", ' 3.2.1')
-//   res.header("Content-Type", "application/json;charset=utf-8");
-
-//   req.header("Access-Control-Expose-Headers","Authorization")
-//   req.header("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, Authorization");
-//   next();
-// });
-// 
-
-// const cors = require('cors');
-// app.use(cors({
-//   credentials: true, // 允许发送cookies
-//   // origin: 'http://localhost:5173/.com' // 客户端请求的域名
-// }));
-// 路由拦截中间件
-app.use(function(req, res, next) {
-  console.log(req.headers)
-  if(req.url == '/adminapi/user/login'){
-    next();
-  }else{
-    var str = req.headers.authorization + '';
-    var token = str.split(' ')[1];
-    var jwtres = JWT.verify(token);
-    console.log(jwtres)
-    if(!jwtres){
-      res.status(4000).send({msg:'token 过期需重新登录'});
-    }else{
-      token = JWT.generate({
-          name: jwtres.name,
-          id: jwtres.id + ""
-      })
-      res.header({
-          Authorization: token
-      });
-      req.__userid = jwtres.id;
-    }
-    next();
-  }
-});
-
 app.use('/adminapi', usersRouter);
 
 // catch 404 and forward to error handler

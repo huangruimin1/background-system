@@ -5,7 +5,18 @@ var verificationCode = require('../../public/javascripts/verificationCode.js')
 
 var UserController = {
     login:async (req,res)=>{
-        let result = await UserService.login(req.body);
+        let verCode = req.session.verCode;
+        let queryData = req.body;
+        let userVerCode = queryData.validateCode.toLowerCase();
+        if(!(userVerCode == verCode)){//验证码不正确
+            console.log("进不来？")
+            res.status(211).send({
+                msg: '验证码不正确'
+            })
+            return;
+        }
+        
+        let result = await UserService.login(queryData);
         let ret = {}
         if(result.length > 0){
             let { id,name,info,age,sex,avatar,role } = result[0];

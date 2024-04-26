@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+// import { createRouter, createWebHistory } from 'vue-router'
 
 import UserAdd from '../views/users-manage/UserAdd.vue'
 import UserList from '../views/users-manage/UserList.vue'
@@ -8,28 +8,28 @@ import NewsAdd from '../views/news-manage/NewsAdd.vue'
 import NewsList from '../views/news-manage/NewsList.vue'
 
 const routersConfig = [{
-  path: '/main/useradd',
-  name: 'UserAdd',
+  path: '/mainbox/userAdd',
+  name: 'userAdd',
   component: UserAdd
 },{
-  path: '/main/userlist',
-  name: 'UserAdd',
-  component: UserAdd
+  path: '/mainbox/userlist',
+  name: 'userlist',
+  component: UserList
 },{
-  path: '/main/newsadd',
-  name: 'NewsAdd',
+  path: '/mainbox/newsadd',
+  name: 'newsadd',
   component: NewsAdd
 },{
-  path: '/main/newslist',
-  name: 'NewsList',
+  path: '/mainbox/newslist',
+  name: 'newslist',
   component: NewsList
 },{
-  path: '/main/productadd',
-  name: 'ProductAdd',
+  path: '/mainbox/productadd',
+  name: 'productadd',
   component: ProductAdd
 },{
-  path: '/main/productlist',
-  name: 'ProductList',
+  path: '/mainbox/productlist',
+  name: 'productlist',
   component: ProductList
 }]
 

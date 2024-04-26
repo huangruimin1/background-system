@@ -1,27 +1,31 @@
 import './assets/main.css'
 
 import { createApp } from 'vue'
-import { createPinia, storeToRefs } from 'pinia'
+import { createPinia } from 'pinia'
 import 'element-plus/dist/index.css'
 
 import App from './App.vue'
 import router from './router'
 
-import axios from 'axios'
 const app = createApp(App)
 app.use(createPinia())
-import { useLoginStore } from './stores/loginStore';
-const linginStore = useLoginStore();
-const { lodding } = storeToRefs(linginStore);
+
+import axios from 'axios'
+
+// import { useLoginStore } from './stores/loginStore';
+// const linginStore = useLoginStore();
+// const { lodding } = storeToRefs(linginStore);
+// import { useRouter } from 'vue-router'
+// const theRouter = useRouter();
 
 
-app.use(router)
-app.mount('#app')
+  
+  console.log('进入userouter之前')
+  app.use(router)
+  console.log('进入app.mount之前')
+  app.mount('#app')
 
-import { useRouter } from 'vue-router'
-const theRouter = useRouter();
-
-// 请求拦截器
+  // 请求拦截器
 axios.defaults.baseURL = "/api"
 // axios.defaults.baseURL = "http://127.0.0.1:5173"
 axios.defaults.withCredentials = true;//携带cookie,默认不携带
@@ -35,14 +39,14 @@ axios.interceptors.request.use(
       // 可以返回config或者返回一个新的config对象
       // 
       // config.withCredentials = true;
-      lodding.value = true;
+      // lodding.value = true;
       const token = localStorage.getItem('token');
       config.headers['Authorization'] = `Bearer ` + token;
       return config;
     },
     function (error) {
       // 对请求错误做些什么
-      lodding.value = false;
+      // lodding.value = false;
       return Promise.reject(error);
     }
   );
@@ -50,14 +54,14 @@ axios.interceptors.request.use(
   // 响应拦截器
   axios.interceptors.response.use(
     function (response) {
-      lodding.value = false;
+      // lodding.value = false;
       // 对响应数据做点什么
     //   alert('收到请求')
     //   console.log('响应被拦截:', response);
       // 可以对响应数据进行任意操作
       if(response.status === 401){
         alert("身份过期")
-        theRouter.push('/login');
+        // theRouter.push('/login');
       }
       const token = response.headers.authorization;
       if(token){
@@ -67,7 +71,6 @@ axios.interceptors.request.use(
     },
     function (error) {
       // 对响应错误做点什么
-      return Promise.reject(error);
+      // return Promise.reject(error);
     }
   );
-

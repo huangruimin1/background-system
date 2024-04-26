@@ -27,7 +27,6 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
-        // javascriptEnabled: true,
         additionalData: `@import "@/assets/global.less";`,
         javascriptEnabled: true,
       },

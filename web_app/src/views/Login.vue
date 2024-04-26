@@ -94,13 +94,14 @@ const rules = reactive<FormRules<typeof loginForm>>({
   { validator: validateCode, trigger: 'blur' },
   { min:4, max:4, message:'验证码必须有四位', trigger: 'blur' }]
 })
-const rutor = useRouter();
+const rout = useRouter();
 const submitForm = (formEl: FormInstance | undefined) => {
   
   if (!formEl) return
   formEl.validate((valid) => {
+    rout.push('/mainbox')
     if (valid) {
-      logining();
+      // logining();
       
       // rutor.push('/mainbox')
     } else {
@@ -162,7 +163,7 @@ onMounted(() => {
     })
     return;
   }
-  getCode();
+  // getCode();
 })
 
 </script>

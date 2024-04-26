@@ -1,31 +1,47 @@
-import { createRouter, createWebHistory } from 'vue-router'
+
+import { useLoginStore } from '@/stores/loginStore'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Mainbox from '../views/Mainbox.vue'
+import routersConfig from './config'
+import { storeToRefs } from 'pinia'
+
+import UserAdd from '../views/users-manage/UserAdd.vue'
+import UserList from '../views/users-manage/UserList.vue'
+import Demo from '../views/Demo.vue'
+import NotFound from '../views/NotFound.vue'
+import type { Ref } from 'vue'
+
+
+const routArr = [{
+  path: '/:pathMatch(.*)',
+  component: NotFound 
+},{
+  path: '/',
+  name: '/',
+  component: Mainbox
+},
+{
+  path: '/login',
+  name: 'login',
+  component: Login
+},
+{
+  path: '/mainbox',
+  name: 'mainbox',
+  component: Mainbox,
+},
+{
+  path: '/demo',
+  name: 'demo',
+  component: Demo,
+}];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: '/',
-      component: Login
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/mainbox',
-      name: 'mainbox',
-      component: Mainbox
-      // component: () => import('../views/AboutView.vue')
-    }
-  ]
+  history: createWebHistory(),
+  routes: routArr
 })
-
-import routersConfig from './config'
-import { useLoginStore } from '@/stores/loginStore'
+console.log('router.beforeEach 路由守卫之前')
 
 // 路由守卫
 router.beforeEach((to,from,next)=>{
@@ -34,8 +50,15 @@ router.beforeEach((to,from,next)=>{
   }else{
     const loginStore = useLoginStore();
     if(loginStore.token.value){
-      configRuters();
-      next();
+      const { ifSingin } = storeToRefs(useLoginStore())
+      if(!ifSingin.value){
+        console.log(' router.addRoute 路由守卫之前')
+        configRuters(ifSingin);
+        next({...to,replace:true});
+      }else{
+        console.log('先走了这里？？')
+        next();
+      }
     }else{
       next('/login')
     }
@@ -43,16 +66,13 @@ router.beforeEach((to,from,next)=>{
 })
 
 // 通过循环动态添加路由
-function configRuters(){
-  const loginStore = useLoginStore();
-  if(loginStore.ifSingin) return;
-
-    routersConfig.forEach((item)=>{
-      router.addRoute(item);
+function configRuters(ifSingin:Ref<boolean>){
+  routersConfig.forEach((item)=>{
+      console.log('这里来了吗')
+      router.addRoute("mainbox",item);
     })
-    loginStore.ifSingin = true
+    ifSingin.value = true
+
 }
-
-
 
 export default router

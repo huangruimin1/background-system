@@ -6,8 +6,13 @@ import ProductAdd from '../views/products-manage/ProductAdd.vue'
 import ProductList from '../views/products-manage/ProductList.vue'
 import NewsAdd from '../views/news-manage/NewsAdd.vue'
 import NewsList from '../views/news-manage/NewsList.vue'
+import UserCenter from '../views/UserCenter.vue'
 
 const routersConfig = [{
+  path: '/mainbox/UserCenter',
+  name: 'usercenter',
+  component: UserCenter
+},{
   path: '/mainbox/userAdd',
   name: 'userAdd',
   component: UserAdd

@@ -5,11 +5,11 @@
         <Header></Header>
       </el-header>
       <el-container>
-        <el-aside :width="openAside ? '200px' : '60PX'">
-          <Aside></Aside>
+        <el-aside :width="localStore.ifOpenAside ? '200px' : '60PX'">
+          <Aside :isCollapse="!localStore.ifOpenAside"></Aside>
         </el-aside>
         <el-main>
-          <div class="togle" :class="{open:openAside}" @click=" openAside = !openAside"></div>
+          <div class="togle" :class="{open:localStore.ifOpenAside}" @click="localStore.togleOpenAside"></div>
           <el-button @click="gopath">点击</el-button>
           <router-view></router-view>
         </el-main>
@@ -22,23 +22,18 @@
 import Header from '@/components/mainbox/Header.vue'
 import Aside from '@/components/mainbox/Aside.vue'
 
-import { useLoginStore } from '@/stores/loginStore'
+import { useLocalStore } from '@/stores/useLocalStore'
 import { onMounted, ref } from 'vue';
 import { useRouter } from "vue-router"
 
 const router = useRouter();
-const { lodding } = useLoginStore();
+const localStore = useLocalStore();
 
 const gopath = () => {
-  router.push('/mainbox/userAdd')
+  router.push('/mainbox/productAdd')
 }
 
-const openAside = ref(true);
-const togleAside = () => {
-
-}
 onMounted(() => {
-  // console.log(lodding)
 })
 
 </script>
@@ -47,12 +42,23 @@ onMounted(() => {
 <style scoped lang="less">
 .el-header {
   border-bottom: 1px solid #eee;
+  background-color: #d6fdf2;
+  box-shadow: 2px 5px 8px #eee;
 }
 
 .common-layout {
   .el-container {
     min-height: calc(100vh - 60px);
   }
+}
+
+
+@media (max-width: 1200px) {
+  .common-layout {
+  .el-container {
+    min-height: calc(100vh - 65px);
+  }
+}
 }
 
 .el-aside {

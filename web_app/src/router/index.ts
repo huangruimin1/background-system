@@ -41,7 +41,6 @@ const router = createRouter({
   history: createWebHistory(),
   routes: routArr
 })
-console.log('router.beforeEach 路由守卫之前')
 
 // 路由守卫
 router.beforeEach((to,from,next)=>{
@@ -52,11 +51,9 @@ router.beforeEach((to,from,next)=>{
     if(loginStore.token.value){
       const { ifSingin } = storeToRefs(useLoginStore())
       if(!ifSingin.value){
-        console.log(' router.addRoute 路由守卫之前')
         configRuters(ifSingin);
         next({...to,replace:true});
       }else{
-        console.log('先走了这里？？')
         next();
       }
     }else{
@@ -68,7 +65,6 @@ router.beforeEach((to,from,next)=>{
 // 通过循环动态添加路由
 function configRuters(ifSingin:Ref<boolean>){
   routersConfig.forEach((item)=>{
-      console.log('这里来了吗')
       router.addRoute("mainbox",item);
     })
     ifSingin.value = true

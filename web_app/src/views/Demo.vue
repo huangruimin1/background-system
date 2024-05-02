@@ -20,7 +20,6 @@ const add = () => {
     component: NewsList
   })  
 
-  console.log(router)
 }
 
 const goAdd = () => {

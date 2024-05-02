@@ -70,7 +70,6 @@ const validatePass = (rule: any, value: any, callback: any) => {
 
 const vaCodeConplate = ref(false);//用于验证码错误时候，elui弹出错误提示
 const verCodeChange = () => {
-  console.log('abc')
   vaCodeConplate.value = true;
 }
 const validateCode = (rule: any, value: any, callback: any) => {

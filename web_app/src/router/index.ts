@@ -1,5 +1,6 @@
 
 import { useLoginStore } from '@/stores/loginStore'
+import { useLocalStore } from '@/stores/useLocalStore'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Mainbox from '../views/Mainbox.vue'
@@ -48,8 +49,13 @@ router.beforeEach((to,from,next)=>{
     next();
   }else{
     const loginStore = useLoginStore();
+    const { ifSingin } = storeToRefs(useLoginStore())
+    const localStore = useLocalStore();
     if(loginStore.token.value){
-      const { ifSingin } = storeToRefs(useLoginStore())
+      if(to.meta.title){//判断是否有标题
+        localStore.setPageTitle(to.meta.title as string);
+      }
+      
       if(!ifSingin.value){
         configRuters(ifSingin);
         next({...to,replace:true});

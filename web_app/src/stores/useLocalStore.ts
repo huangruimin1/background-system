@@ -4,6 +4,7 @@ export const useLocalStore = defineStore('useLocalStore',{
     state: () => ({
       ifOpen: false,
       ifOpenAside: false,//侧边栏是否展开
+      pageTitle: '',//mainbox的 页头title
     }),
     getters: {
       
@@ -14,6 +15,9 @@ export const useLocalStore = defineStore('useLocalStore',{
       },
       togleOpenAside(){
         this.ifOpenAside = !this.ifOpenAside
+      },
+      setPageTitle(value:string){
+        this.pageTitle = value;
       }
     },
     persist: [

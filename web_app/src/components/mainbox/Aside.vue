@@ -1,5 +1,9 @@
 <template>
   <el-menu default-active="" :collapse="isCollapse" :collapse-transition="false" router>
+    <el-menu-item index="/mainbox/Home">
+      <el-icon><House /></el-icon>
+      <template #title>首页</template>
+    </el-menu-item>
     <el-menu-item index="/mainbox/UserCenter">
       <el-icon><LocationInformation /></el-icon>
       <template #title>个人中心</template>

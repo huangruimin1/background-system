@@ -9,8 +9,22 @@
           <Aside :isCollapse="!localStore.ifOpenAside"></Aside>
         </el-aside>
         <el-main>
-          <div class="togle" :class="{open:localStore.ifOpenAside}" @click="localStore.togleOpenAside"></div>
-          <el-button @click="gopath">点击</el-button>
+          <div class="togle" :class="{ open: localStore.ifOpenAside }" @click="localStore.togleOpenAside">
+            <!-- 折叠侧边栏的按钮 -->
+          </div>
+          <el-page-header :icon="null" title="**后台管理系统">
+            <template #content>
+              <div class="flex items-center top-continer">
+                <!-- <el-avatar :size="32" class="mr-3"
+                  src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" /> -->
+                <!-- <span class="text-large font-600 mr-3"> Title </span> -->
+                <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
+                 {{ localStore.pageTitle }}
+                </span>
+              </div>
+            </template>
+          </el-page-header>
+
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -29,9 +43,9 @@ import { useRouter } from "vue-router"
 const router = useRouter();
 const localStore = useLocalStore();
 
-const gopath = () => {
-  router.push('/mainbox/productAdd')
-}
+// const gopath = () => {
+//   router.push('/mainbox/productAdd')
+// }
 
 onMounted(() => {
 })
@@ -55,20 +69,22 @@ onMounted(() => {
 
 @media (max-width: 1200px) {
   .common-layout {
-  .el-container {
-    min-height: calc(100vh - 65px);
+    .el-container {
+      min-height: calc(100vh - 65px);
+    }
   }
-}
 }
 
 .el-aside {
   border-right: 1px solid #eee;
 }
-.el-main{
+
+.el-main {
   position: relative;
-  .togle{
+  padding-top: 10px;
+  .togle {
     position: absolute;
-    opacity: .6;
+    opacity: .2;
     width: 14px;
     height: 50px;
     border: 1px solid #eee;
@@ -81,8 +97,10 @@ onMounted(() => {
     top: 0;
     background-color: rgba(190, 255, 204, .5);
     z-index: 99;
+    transition: all .25s ease;
   }
-  .togle::before{
+
+  .togle::before {
     content: '';
     position: absolute;
     border-left: 6px solid #55815e;
@@ -90,14 +108,22 @@ onMounted(() => {
     border-bottom: 6px solid transparent;
     margin: 0 auto;
   }
-  .open.togle::before{
+
+  .open.togle::before {
     content: '';
     border-left: none;
     border-right: 6px solid #55815e;
   }
-  .togle:hover{
+
+  .togle:hover {
     cursor: pointer;
+    opacity: .6;
     background-color: rgba(190, 255, 204, 1);
   }
+}
+
+.top-continer{
+  display: flex;
+  align-items: center;
 }
 </style>

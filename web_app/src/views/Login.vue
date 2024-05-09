@@ -39,11 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, onUpdated, reactive, ref, watch } from 'vue'
+import { nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 
 import axios from 'axios'
 import { useRouter } from 'vue-router';
+import { useLocalStore } from '@/stores/useLocalStore';
 
 const loginFormRef = ref<FormInstance>()
 
@@ -98,9 +99,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
   
   if (!formEl) return
   formEl.validate((valid) => {
-    rout.push('/mainbox')
+    // rout.push('/mainbox')
     if (valid) {
-      // logining();
+      logining();
       
       // rutor.push('/mainbox')
     } else {
@@ -121,6 +122,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
       message: '登录成功',
       type: 'success'
     })
+
+    setUserInfo(res.data.data)
+    rout.push('/mainbox')
   }else if(res.status == 211){
     // 验证码不正确
     vaCodeConplate.value = false;
@@ -162,8 +166,16 @@ onMounted(() => {
     })
     return;
   }
-  // getCode();
+  getCode();
 })
+
+// 将登录信息写入本地存储
+import { type UserInfo } from '@/types/index';
+
+const setUserInfo = (val:UserInfo) => {
+  const localStore = useLocalStore();
+  localStore.changeUserInfo(val)
+}
 
 </script>
 

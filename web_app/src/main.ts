@@ -6,6 +6,9 @@ import App from './App.vue'
 import router from './router'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+import VueCropper from 'vue-cropper'; 
+import 'vue-cropper/dist/index.css'
+
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 
 const app = createApp(App)
@@ -20,6 +23,7 @@ pinia.use(
   })
 )
 app.use(pinia)
+app.use(VueCropper)
 app.use(router)
 app.mount('#app')
 

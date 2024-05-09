@@ -1,5 +1,5 @@
 <template>
-  <el-menu default-active="" :collapse="isCollapse" :collapse-transition="false" router>
+  <el-menu :default-active="$route.path" :collapse="isCollapse" :collapse-transition="false" router>
     <el-menu-item index="/mainbox/Home">
       <el-icon><House /></el-icon>
       <template #title>首页</template>
@@ -43,6 +43,8 @@
 </template>
 
 <script lang="ts" setup>
+import { onMounted } from 'vue';
+
 
 defineProps({
   isCollapse: {
@@ -50,10 +52,14 @@ defineProps({
     defautl: false
   }
 })
+
+onMounted( () => {
+})
 </script>
 
 <style lang="less">
 .el-menu{
   height: 100%;
+  background-color: #f1fff7;
 }
 </style>

@@ -26,11 +26,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // //设置跨域访问
-app.all('*',  function(req, res, next) {
+app.all('*', function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With, Authorization, verCode");
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-  res.header("Access-Control-Expose-Headers","Authorization","verCode");
+  res.header("Access-Control-Expose-Headers", "Authorization", "verCode");
   res.header("X-Powered-By", ' 3.2.1')
   res.header("Content-Type", "application/json;charset=utf-8");
   next();
@@ -41,30 +41,28 @@ app.all('*',  function(req, res, next) {
 //   // origin: 'http://localhost:5173/.com' // 客户端请求的域名
 // }));
 // 路由拦截中间件
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   console.log(req.headers)
-  if(req.url == '/adminapi/user/login' || req.url == '/adminapi/user/getcode'){
+  if (req.url == '/adminapi/user/login' || req.url == '/adminapi/user/getcode') {
     next();
-  }else{
+  } else {
     var str = req.headers.authorization + '';
     var token = str.split(' ')[1];
     var jwtres = JWT.verify(token);
     console.log(jwtres)
-    if(!jwtres){
-      res.status(401).send({msg:'token 过期需重新登录'});
-      return;
-    }else{
+    if (!jwtres) {
+      res.status(401).send({ msg: 'token 过期需重新登录' });
+    } else {
       token = JWT.generate({
-          name: jwtres.name,
-          id: jwtres.id + ""
+        name: jwtres.name,
+        id: jwtres.id + ""
       })
       res.header({
-          Authorization: token
+        Authorization: token
       });
       req.__userid = jwtres.id;
       next();
     }
-    
   }
 });
 // 配置session
@@ -91,19 +89,19 @@ app.use(session({
   rolling: false,
   saveUninitialized: true,
   cookie: {
-      httpOnly: false,
-      maxAge: 180000
+    httpOnly: false,
+    maxAge: 180000
   }
 }));
 app.use('/adminapi', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -115,6 +113,6 @@ app.use(function(err, req, res, next) {
 
 var server = http.createServer(app);
 // module.exports = app;
-server.listen(9000,()=>{
+server.listen(9000, () => {
   console.log('服务启动了... ...');
 })

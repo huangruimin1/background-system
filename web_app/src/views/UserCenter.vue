@@ -148,7 +148,7 @@ const delEmage = (e: MouseEvent) => {
 }
 
 let uploadOptions = reactive({
-  display: 'block',
+  display: 'none',
   // display: 'none',
   img: ''
 })

@@ -31,6 +31,7 @@ axios.interceptors.request.use(
       // 对响应数据做点什么
     //   alert('收到请求')
       // 可以对响应数据进行任意操作
+      console.log(response)
       if(response.status === 401){
         alert("身份过期")
         // theRouter.push('/login');
@@ -42,6 +43,13 @@ axios.interceptors.request.use(
       return response;
     },
     function (error) {
+      
+      // alert("身份过期")
+      if(error.response && error.response.status == 401){
+        alert('身份过期，请重新登录！！')
+        window.location.href='/login'
+      }
+      console.log(error)
       // 对响应错误做点什么
       // return Promise.reject(error);
     }

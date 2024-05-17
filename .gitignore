@@ -9,6 +9,9 @@ node_modules/
 /node_modules/
 */.vscode/
 */.vscode
+*/public/avataruploads/*
+*/public/avataruploads/
+/public/avataruploads/
 images/
 */images
  */node_modules/

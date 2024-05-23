@@ -41,30 +41,30 @@ app.all('*', function (req, res, next) {
 //   // origin: 'http://localhost:5173/.com' // 客户端请求的域名
 // }));
 // 路由拦截中间件
-// app.use(function (req, res, next) {
-//   console.log(req.headers)
-//   if (req.url == '/adminapi/user/login' || req.url == '/adminapi/user/getcode') {
-//     next();
-//   } else {
-//     var str = req.headers.authorization + '';
-//     var token = str.split(' ')[1];
-//     var jwtres = JWT.verify(token);
-//     console.log(jwtres)
-//     if (!token || !jwtres) {
-//       res.status(401).send({ msg: 'token 过期需重新登录' });
-//     } else {
-//       token = JWT.generate({
-//         name: jwtres.name,
-//         id: jwtres.id + ""
-//       })
-//       res.header({
-//         Authorization: token
-//       });
-//       req.__userid = jwtres.id;
-//       next();
-//     }
-//   }
-// });
+app.use(function (req, res, next) {
+  // console.log(req.headers)
+  if (req.url == '/adminapi/user/login' || req.url == '/adminapi/user/getcode') {
+    next();
+  } else {
+    var str = req.headers.authorization + '';
+    var token = str.split(' ')[1];
+    var jwtres = JWT.verify(token);
+    console.log(jwtres)
+    if (!token || !jwtres) {
+      res.status(401).send({ msg: 'token 过期需重新登录' });
+    } else {
+      token = JWT.generate({
+        name: jwtres.name,
+        id: jwtres.id + ""
+      })
+      res.header({
+        Authorization: token
+      });
+      req.__userid = jwtres.id;
+      next();
+    }
+  }
+});
 // 配置session
 /**
  * session

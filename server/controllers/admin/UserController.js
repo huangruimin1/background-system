@@ -20,15 +20,14 @@ var UserController = {
         let result = await UserService.login(queryData);
         let ret = {}
         if (result.length > 0) {
-            let { id, name, info, age, sex, avatar, usertype } = result[0];
+            let { id, username, password, pone, addr, name, age, sex, avatar, usertype } = result[0];
             let token = JWT.generate({ name, id })
             res.header({
                 Authorization: token,
-                abc: 'abc'
             });
             ret = {
                 state: 1,
-                data: { id, name, info, age, sex, avatar, usertype },
+                data: { id, username, password, pone, addr, name, age, sex, avatar, usertype },
                 msg: 'ok'
             }
         } else {
@@ -201,17 +200,17 @@ var UserController = {
             // 重名？
             let result = await UserService.modifyUser({ username, pone, addr, name, age: Number(age), sex: Number(sex), usertype: Number(usertype) });
             console.log(result.affectedRows)
-            if(result.affectedRows > 0){
+            if (result.affectedRows > 0) {
                 res.send({
                     state: 0,
                     data: result,
                     msg: '修改用户信息成功'
                 })
-            }else{
+            } else {
                 res.send({
                     state: 1,
                     data: result,
-                    msg: '失败'
+                    msg: '修改用户信息失败'
                 })
             }
         } catch (error) {
@@ -219,15 +218,26 @@ var UserController = {
         }
     },
     // 删除用户
-    deleteUser: async(req, res) => {
+    deleteUser: async (req, res) => {
         let { username } = req.body;
-        if(!username){
+        if (!username) {
             return res.send('无法删除该用户')
         }
         try {
-            const result = await UserService.deleteUser( username );
-            console.log(result)
-            res.send(result);
+            const result = await UserService.deleteUser(username);
+            if (result.affectedRows && result.affectedRows > 0) {
+                res.send({
+                    state: 0,
+                    data: result,
+                    msg: '删除用户成功'
+                })
+            } else {
+                res.send({
+                    state: 1,
+                    data: result,
+                    msg: '删除用户失败'
+                })
+            }
         } catch (error) {
             console.log(error)
             throw error;

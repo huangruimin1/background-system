@@ -124,7 +124,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     })
 
     setUserInfo(res.data.data)
-    rout.push('/mainbox')
+    rout.push('/mainbox/Home')
   }else if(res.status == 211){
     // 验证码不正确
     vaCodeConplate.value = false;

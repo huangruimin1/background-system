@@ -6,14 +6,17 @@
     </div>
     <div class="right">
       <span class="span">
-        欢迎某某某回来!
+        <span style="color: rgb(167 150 99);margin-right: 2px;">
+          {{ store.userInfo.name }}
+        </span>
       </span>
       <el-dropdown>
         <span class="el-dropdown-link">
           <el-icon class="el-icon--right">
-            <el-icon :size="20">
+            <!-- <el-icon :size="20">
               <UserFilled />
-            </el-icon>
+            </el-icon> -->
+            <img class="user-avatar" :src="store.userInfo.avatar" alt="">
           </el-icon>
         </span>
         <template #dropdown>
@@ -28,11 +31,18 @@
 </template>
 
 <script lang="ts" setup>
+  import { onMounted } from 'vue';
   import { useRouter } from 'vue-router'
+  import { useLocalStore } from '@/stores/useLocalStore'
   const router = useRouter();
   const goLogin = () => {
     router.push('/login')
   }
+
+  const store = useLocalStore();
+  onMounted(() => {
+    
+  })
 </script>
 
 <style lang="less">
@@ -52,6 +62,12 @@
       font-size: 16px;
       color: #000;
     }
+  }
+  .user-avatar{
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid #fff;
   }
 }
 </style>

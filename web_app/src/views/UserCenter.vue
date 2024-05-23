@@ -76,13 +76,11 @@ import upload from './upload.vue'
 import { ElMessage, type FormInstance, type FormRules, type UploadProps } from 'element-plus';
 import defaultImg from '@/assets/images/default.jpg'
 
-let BASS_URL = 'http://localhost:9000/'
-
 const store = useLocalStore();
 let uploadUrl = ref();
 const { name, sex, info, avatar } = store.userInfo;
 const userAvatar = computed(() =>
-  store.userInfo.avatar ? BASS_URL + store.userInfo.avatar : defaultImg
+  store.userInfo.avatar ? store.userInfo.avatar : defaultImg
 )
 let userRuleFormRef = ref<FormInstance>();
 let avaFile = ref();

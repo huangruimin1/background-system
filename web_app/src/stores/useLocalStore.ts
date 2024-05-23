@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { type UserInfo } from '@/types/index';
 
+let BASS_URL = 'http://localhost:9000/';
 export const useLocalStore = defineStore('useLocalStore', {
   state: () => ({
     ifOpen: false,
@@ -34,6 +35,8 @@ export const useLocalStore = defineStore('useLocalStore', {
         ...this.userInfo,
         ...value
       }
+      let { avatar } = value;
+      this.userInfo.avatar = BASS_URL + avatar
     },
   },
   persist: [

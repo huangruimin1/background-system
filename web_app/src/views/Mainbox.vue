@@ -12,6 +12,7 @@
           <div class="togle" :class="{ open: localStore.ifOpenAside }" @click="localStore.togleOpenAside">
             <!-- 折叠侧边栏的按钮 -->
           </div>
+
           <el-page-header :icon="null" title="**后台管理系统" class="top-continer">
             <template #content>
               <div class="flex items-center">
@@ -125,6 +126,6 @@ onMounted(() => {
 .top-continer{
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 </style>

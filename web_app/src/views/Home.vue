@@ -2,11 +2,16 @@
   <div class="continer">
     <el-card shadow="always">
       <el-row>
-        <el-col :span="8">
-          <el-avatar :size="50" />
+        <el-col :span="2">
+          <el-avatar :size="50" :src="store.userInfo.avatar" />
         </el-col>
-        <el-col :span="16">
-          欢迎回来
+        <el-col :span="22">
+          <div class="right">
+            欢迎 {{ store.userInfo.name }} 回来！
+            <div class="time">
+             现在是北京时间： {{ time }}
+            </div>
+          </div>
         </el-col>
       </el-row>
     </el-card>
@@ -22,7 +27,33 @@
 </template>
 
 <script lang="ts" setup>
+  import { useLocalStore } from '@/stores/useLocalStore';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+  const store = useLocalStore();
 
+  // 随便整个现在时间玩玩
+  let timer = 0;
+  const date = ()=>{
+      const d = new Date();
+      let year = d.getFullYear();
+      let month = d.getMonth();
+      let day = d.getDay() + 1;
+      let hours = d.getHours();
+      let minute = d.getMinutes();
+      let second = d.getSeconds();
+      let str = year + '年' +month+ '月'+ day +'日'+' '+hours+'时'+minute+'分'+second+'秒';
+      return str;
+    }
+    let time = ref();
+    onMounted(()=>{
+      timer = setInterval(()=>{
+        time.value = date()
+      },1000)
+    })
+    onBeforeUnmount(()=>{
+      console.log('进来了吗')
+      clearInterval(timer)
+    })
 </script>
 <style scoped>
 .el-card {
@@ -43,5 +74,15 @@
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
+}
+.right{
+  display: flex;
+  align-items: left;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+}
+.time{
+  margin-top: 2px;
 }
 </style>
